@@ -1,0 +1,55 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %} 
+
+{% block css %} <style> html, body, #map {
+    margin: 0;
+    padding: 0;
+    height: 30rem;
+    width: 100%;
+}</style>{% endblock %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+<h3>Hi {{user.username}}</h3>
+<a href="{% url 'profile' user_id=user.id %}">Myprofile</a>
+<a href="{% url 'logout' %}">logout</a>
+
+<div class="container mt-5">
+        <div class="row gx-5">
+            <div class="col">
+                <div id="map"></div>
+                <input id="slider" type="range" min="5000" max="100000" step="5000" value="5000">
+            </div>
+        
+            <div class="col">
+                <div id="placeInRadius" >Places within radius
+                    <ul id="placelist" class="list-group">
+                    </ul>
+                 </div>
+            </div>
+        
+
+    </div>
+
+
+
+
+{% else%}
+
+<a href="{% url 'signup' %}">signup</a>
+<a href="{% url 'login' %}">login</a>
+
+{% endif %}
+
+
+<script src="{% static '/user_profile/globalMap.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAikNagrgJlCUicIvsQIKfc4HprdRQ5WQ&callback=initMap">
+</script>
+
+{% endblock  %}
