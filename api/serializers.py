@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Mylatlng,UserStory
-from user_profile.models import UserProfile
+from .models import Mylatlng,UserStory,Photos
+from user_profiles.models import Userprofile
 
 
 class MylatlngSerializer(serializers.ModelSerializer):
@@ -11,11 +11,16 @@ class MylatlngSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model=UserProfile
+        model=Userprofile
         fields="__all__"
 
 
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model=UserStory
+        fields="__all__"
+
+class PhotosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Photos
         fields="__all__"

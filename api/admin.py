@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from user_profile import models
+from user_profiles import models
 from .models import Mylatlng,UserStory
 
 # Register your models here.

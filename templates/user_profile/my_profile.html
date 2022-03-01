@@ -2,31 +2,50 @@
 {% load static %}
 
 
-{% block title %}signup{% endblock %}
+{% block title %}MyProfile{% endblock %}
 
-{% block css %} <style> html, body, #map {
-    margin: 0;
-    padding: 0;
-    height: 50rem;
-    width: 50rem;
+{% block css %} <style> 
+
+html{
+  height: 100%;
+}
+
+body{
+  height: 100%;
+}
+
+#map {
+  margin-top: 1.5rem;
+    height: 90vh;
+    width: 100%;
+    z-index: 10;
+    border-radius: 2rem;
     
 }
+
 #mapwrapper{
-    height: 50rem;
-    width: 50rem;
+  padding: 0; 
+  margin: 0;
+  height: 100%;
+  width: 100%;
+
     display: flex;
-    justify-content: center;
+  
     align-items: center;
-    position: relative;
+    position: relative; 
 }
+
 #overlay {
     position: absolute;
-    bottom:0;
+   bottom: 0;
+    left: 0;
     display: none;
     background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
-    height: 25rem;
+    height: 27.5rem;
     text-align: center;
+    overflow: hidden;
+    z-index: 100;
 
 }
 
@@ -34,60 +53,304 @@
     display: none !important;
 }
 
-#cancel{
-    color: white;
-    background-color: #000000;
-    float: right;
-}
+
 
 #exist{
     color: white;
     display: none;
 }
 
-#yes-button{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    
-}
+
 #story{
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
+    width: 100%;
+    height: 12rem;
    
+}
+
+::placeholder { 
+  color: White !important;
+  opacity: 1 !important; 
+}
+
+.story-settings{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#storytitle{
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white; 
+}
+
+
+
+body{
+    background-color: #08AEEA;
+    background-image: linear-gradient(0deg, #2AF598 0%, #08AEEA 100%);
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size:cover;
+    }
+
+#stories{
+      
+      color: black;
+      height: calc(77vh - 45px);
+        overflow: auto;
+    overflow-x: hidden;
+    position: relative;
+    
+    }
+
+
+
+.tempimg{
+    max-width: 125px;
+}
+
+#uploadwrapper{
+    display: block;
+}
+
+#imginitial{
+    display: none;
+}
+
+#imginitiallabel{
+    position: absolute;
+    bottom: 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    
+}
+
+#preview{
+    height: 10rem;
+    overflow: auto;
+}
+
+.displaynone{
+  display: none;
+}
+
+.jumbotron{
+  height: 25rem;
+}
+
+.photoitems{
+  max-width: 100px;
+}
+
+
+#map-over{
+  position: relative;
+}
+
+.gm-style .gm-style-iw-d::-webkit-scrollbar-track, 
+.gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
+.gm-style .gm-style-iw-c,
+.gm-style .gm-style-iw-t::after { 
+  background: dodgerblue;
+  color: white;
+}
+.jumbotron{
+  position: relative;
+}
+
+.drp::after{
+  border: 0;
+}
+.drp{
+  background-color: transparent;
+  border: 0;
+  color: white;
+}
+
+  #stories::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#stories::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+#stories::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+}
+
+.card-body{
+ 
+}
+.card-text{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+.storyphotos{
+  max-width: 15rem;
 }
 
 </style>{% endblock %}
 
+{% block navitem %} 
+<li class="nav-item active">
+  <a class="nav-link text-light" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+</li>
+<li class="nav-item">
+  <a class="nav-link text-light" href="{% url 'global' %}">Stories Across</a>
+</li>
+ {% endblock %}
+
 {% block body %}
-<div id="mapwrapper">
 
+<input id="USERID" type="hidden" value="{{user.id}}" style="display: none;">
+{{ jid|json_script:"hello-data" }}
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6">
+      <div id="map-over">
+        <div id="map"></div>
+        <div id="mapload" style="background-color: white; position: absolute; top :0; bottom: 0; width: 100%; height: 100%; pointer-events: none; z-index: 200; display: flex;justify-content: center; border-radius: 1.8rem;">
+          <div class="spinner-grow spinner-grow-sm text-danger m-1" style="align-self: center;" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow spinner-grow-sm text-danger m-1" style="align-self: center;" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow spinner-grow-sm text-danger m-1" style="align-self: center;" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div id="overlay" >
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <form id="uploadimgtes" style="width: 100%; height: 100px;" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div id="preview" style="width: 100%; height: 100px;"></div>
+                      <input id="imginitial" type="file" multiple name="images">
+                      <label id="imginitiallabel" class="btn btn-success" style="position: absolute;top: 2px; left: 2px;  height: 2.5rem;" for ="imginitial">Add photos</label>
+                      
+                  
+                  </form>
+                </div>
+              </div>
+              <div class="row ">
+                <div class="col">
+                  <form id="formoverlays" >
+          
+                    <input id="storytitle"  class="form-control" type="text" placeholder="Story Title">
+                    <hr class="my-4">
+                    <div class="form-group">
+                        <textarea class="form-control" id="story" placeholder="Story Content" ></textarea>
+                      </div>
+                    <button id="cancel" class="btn btn-danger">Cancel</button>
+                <button id="yes-button" type="submit" class="btn btn-primary " >Add Story</button>
+                <p id="exist">already exists</p>
+                </form>
+                </div>
+              </div>
+            </div>    
+          
+            
     
-    <div id="map"></div>
-    <div id="overlay" >
-        <button id="cancel">Cancel</button>
-        <button id="yes-button" type="submit" >Add Story</button>
-        <p id="exist">already exists</p>
-        <textarea id="story" name="story" rows="4" cols="50"></textarea>
-
+         
+            
+    
+      </div>
+      </div>
     </div>
+    <div class="col-sm-6 " style="position: relative;">
+      <div class="row mb-4">
+        <div class="col-6"><span ><button id="current" class="btn btn-primary mt-5 mb-2 ">Add Story To Current Location </button><h1 style="display: block;" class="text-dark display-4" style="font-size: 2rem">Your Stories</h1></span></div>
+        <div class="col-6">
+          <div class="d-flex  align-items-center" style=" position: relative;  background-color: #FFF9E9; border-radius: 4.7rem 1rem 1rem 4.7rem; margin-top: 1.5rem;">
+            <img src="{{request.user.profile_image.url}}" class="img-thumbnail rounded-circle mr-4" 
+                  style="object-fit: cover ; width: 150px; height: 150px; position: relative; top: 0; left: 0;" alt="">
+                  <div style="margin: auto;">
+                    <h5 style="font-size: 1.5rem;font-weight: 300;line-height: 1.2;" id="overlay-name">{{name}}</h5>
+                  <hr>
+                  <span style="font-size: 1.2rem;font-weight: 400;line-height: 1.2;" >
+                  <span id="overlay-upreach" class="mr-2">Upreach: {{likes}}</span> 
+                  <span id="overlay-postcount" class="ml-2">Posts: {{posts}}</span>
+                </span> 
+                  </div>
+          
+          </div>
+        </div>
+      </div>
+      
 
-</div>
+      <div id="postdetail" class="rounded container m-2" style="position: absolute;top: 0; left: 0; background-color: white; width: 98%;  height: 98%; z-index:200; display: none; border-radius: 1.8rem;">
+        <button type="button" id="closebtn" class="btn btn-outline-danger float-right m-3 "> <span class="m-1">X</span></button>
+        <br>
+        <br>
+        <br>
+        
+        <div class="container">
 
+          <div class="row">
+            <div class="col-12">
+              <div id="overlaycar" style="margin: auto;" ></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <h5  id="overlaytitle"></h5>
+              <p id="overlaystory"></p>
+            </div>
+          </div>
 
-<div id="map-control">
+        </div>
     
+      
+
+      </div>
+
+
+      
+      
+      {% if storynos == 0 %}
+      <div> No Stories</div>
+      {% endif %}
+      <div class="container" style="width: 100%;  position: relative;" >
+        <div id="stories" class="row g-0 p-0"  ></div>
+        <div id="stories-overlay" class="rounded" style="position: absolute;top: 0; background-color: white; width: 100%;  height: 100%; z-index:200; pointer-events: none; z-index: 200; display: flex;justify-content: center; border-radius: 1.8rem;">
+          
+          <div class="spinner-border text-dark" style="align-self: center;" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+
+        </div>
+        
+       
+      </div>
+      
+        </div>
+      </div>
+  </div>
 </div>
 
-<div>
-    <img src="{{my_profile.profile_img.url}}" style='border: 2px solid black;' width='250' alt="">
+
 </div>
-<form enctype="multipart/form-data" method="post">{% csrf_token %}
-<input type="file" name="user_img" >
-<div>
-    <button type="submit">submit</button>
-</div>
-</form>
+
+
+
+
+
+
 
 
 <script>
@@ -96,7 +359,8 @@
 <script src="{% static '/user_profile/myProfileMap.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAikNagrgJlCUicIvsQIKfc4HprdRQ5WQ&callback=Map">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAikNagrgJlCUicIvsQIKfc4HprdRQ5WQ&callback=initMap">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 
 {% endblock  %}

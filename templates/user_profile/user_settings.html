@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock %}
+{% block css %} <style> 
+
+ 
+    </style>
+    {% endblock %}
+
+    {% block navitem %} 
+        {% if user.is_authenticated %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+          {% endif %}
+
+
+ {% endblock %}
+
+
+
+{% block body %}
+
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+
+<div>
+    <input type="file" name="user_img" >
+    <button type="submit">submit</button>
+</div>
+</form>
+
+
+
+{% endblock  %}

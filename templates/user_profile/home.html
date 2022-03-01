@@ -4,44 +4,164 @@
 
 {% block title %}Home{% endblock %} 
 
-{% block css %} <style> html, body, #map {
+{% block css %} <style> 
+#map {
     margin: 0;
     padding: 0;
-    height: 30rem;
+    height: 100%;
     width: 100%;
-}</style>{% endblock %}
+    z-index: 10;
+}
+#placeInRadius{
+    overflow: auto;
+    overflow-x: hidden;
+    height: calc(100vh - 45px);
+
+}
+
+#placeInRadius::-webkit-scrollbar {
+  width: 1em;
+  display: none;
+}
+
+.placephoto{
+  max-width: 600px;
+}
+
+.rowhome{
+  height: 94vh;
+}
+
+.card-header{
+  background-color: #06292f;
+  color: white;
+  font-weight: 700;
+}
+
+.phglobal{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  grid-auto-flow: dense;
+}
+
+.phglobal div.landscape {
+  grid-column-end: span 2;
+}
+
+.gm-style .gm-style-iw-d::-webkit-scrollbar-track, 
+.gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
+.gm-style .gm-style-iw-c,
+.gm-style .gm-style-iw-t::after { 
+  background: dodgerblue;
+  color: white;
+}
+
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+
+
+{% endblock %}
+
+
+
+  {% block navitem %} 
+        {% if user.is_authenticated %}
+<li class="nav-item">
+  <a class="nav-link text-light" href="{% url 'profile' user_id=user.id %}">My Profile</a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link text-light" href="{% url 'global' %}">Stories Across</a>
+</li>
+
+          {% endif %}
+
+
+ {% endblock %}
+ 
 
 {% block body %}
 
 {% if user.is_authenticated %}
-<h3>Hi {{user.username}}</h3>
-<a href="{% url 'profile' user_id=user.id %}">Myprofile</a>
-<a href="{% url 'logout' %}">logout</a>
 
-<div class="container mt-5">
-        <div class="row gx-5">
-            <div class="col">
-                <div id="map"></div>
-                <input id="slider" type="range" min="5000" max="100000" step="5000" value="5000">
+
+<div class="container-fluid  pt-2 pb-2 ">
+        <div class="row h-100">
+            <div class="col-9">
+                <div id="map" class="rounded"></div>
+                
             </div>
         
-            <div class="col">
-                <div id="placeInRadius" >Places within radius
-                    <ul id="placelist" class="list-group">
-                    </ul>
+            <div class="col-3">
+                <div>
+                  <div id="placeInRadius" >
+                    <div class="card">
+                      <div class="card-header">
+                        Featured
+                      </div>
+                      <ul id="hilights" class="list-group list-group-flush">
+                        {% for r in rem %}
+                        <li class="list-group-item">{{r.place_name}} <form action="post"> {% csrf_token %} <button id="del-{{r.id}}" name="delete trip" class="btn btn-outline-danger"  value="{{r.id}}">Delete</button>
+                         </form> </li>
+                        {% endfor%}
+                      </ul>
+                    </div>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend rounded">
+                        <span class="input-group-text" id="basic-addon1">5KM Radius</span>
+                      </div>
+                      <input type="range" class="" id="slider"  min="5000" max="100000" step="5000" value="5000" aria-label="Username" aria-describedby="basic-addon1">
+                      <button id="current" class="btn btn-outline-primary btn-sm">Current location</button>
+                    </div> 
+                  
+                  <h1>Places within radius</h1>
+                    <div id="placelist"></div>
+                </div>
+                
+                  
                  </div>
             </div>
-        
-
+          
     </div>
-
-
-
 
 {% else%}
 
-<a href="{% url 'signup' %}">signup</a>
-<a href="{% url 'login' %}">login</a>
+<div class="container-fluid ">
+  <div class="row rowhome align-items-center">
+    <div class="col-6">
+      <div id="left" >
+        <h1 class="display-1 text-light">Travelogue</h1>
+        <p class="text-light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur unde, sed reiciendis modi vel laudantium! Laboriosam quas co
+          nsequatur doloribus, voluptatibus odit ipsam fugiat unde at, minus incidunt nihil eveniet commodi.</p>
+        </div>
+    </div>
+    <div class="col-3"></div>
+    <div class="col-3">
+      <div class="card border border-dark">
+        <div class="card-header">
+          Explorer Login
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <input type="email" class="form-control" name="email" placeholder="Email" ></input>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="password" placeholder="Password"></input>
+            </div>
+            <button type="submit"  class="btn btn-outline-primary">submit</button>
+              <div class="float-right"><a href="{% url 'register' %}">Signup Explorer?</a></div></div>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 {% endif %}
 

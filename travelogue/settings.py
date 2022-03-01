@@ -20,10 +20,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wj(f0y5&hh(55+_2b%bqbv!tuby)v0%5$e+rre^4d*lp!d$)l4'
+SECRET_KEY = 'ggr#ytkipz$re=nyv**+@2)y@zz1=5-l#8q0@k#sguz9i&_@3v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+AUTH_USER_MODEL="user_profiles.Userprofile"
+
+AUTHENTICATION_BACKEND=(
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'user_profiles.backends.CaseInsensitiveModelBackend',
+    "oscar.apps.customer.auth_backends.EmailBackend"
+    )
+
 
 ALLOWED_HOSTS = []
 
@@ -37,8 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user_profile',
-    'api.apps.ApiConfig',
+    "user_profiles",
+    "api",
     'rest_framework'
 ]
 
@@ -50,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'travelogue.urls'
@@ -79,7 +88,7 @@ WSGI_APPLICATION = 'travelogue.wsgi.application'
 DATABASES = {
 	'default': {
 	    'ENGINE': 'django.db.backends.mysql',#MySQL engine will be used as the db engine
-	    'NAME': 'travelogue',#Name of the database created for this project
+	    'NAME': 'travelogue2',#Name of the database created for this project
 	    'USER': 'root',#Enter your mysql username
 	    'PASSWORD': '1397',#Enter your mysql password
 	    'HOST': 'localhost',
@@ -125,8 +134,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
-LOGIN_REDIRECT_URL='/'
-LOGOUT_REDIRECT_URL='/'

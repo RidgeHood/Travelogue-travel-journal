@@ -21,10 +21,10 @@ from django.urls.conf import include
 from django.conf import  settings
 from django.conf.urls.static import static
 
-from travelogue.settings import MEDIA_URL
+from .settings import MEDIA_URL
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include('user_profile.urls')),
+    path("",include('user_profiles.urls')),
     path("api/",include('api.urls'))
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
